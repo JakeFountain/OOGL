@@ -33,7 +33,7 @@ namespace GL
 		texDepth = other.texDepth;
 	}
 
-	Framebuffer::Framebuffer( uint width, uint height, uchar color, uchar depth )
+	Framebuffer::Framebuffer( uint width, uint height, GLuint* colour_buff, GLuint* depth_buff, uchar color, uchar depth)
 	{
 		PUSHSTATE()
 
@@ -55,17 +55,24 @@ namespace GL
 		glBindFramebuffer( GL_DRAW_FRAMEBUFFER, obj );
 
 		// Create texture to hold color buffer
-		texColor.Image2D( 0, DataType::UnsignedByte, Format::RGBA, width, height, colorFormat );
-		texColor.SetWrapping( GL::Wrapping::ClampEdge, GL::Wrapping::ClampEdge );
-		texColor.SetFilters( GL::Filter::Linear, GL::Filter::Linear );
+		if(colour_buff){
+			texColor = Texture(*colour_buff);
+		} else{
+			texColor.Image2D( 0, DataType::UnsignedByte, Format::RGBA, width, height, colorFormat );
+			texColor.SetWrapping( GL::Wrapping::ClampEdge, GL::Wrapping::ClampEdge );
+			texColor.SetFilters( GL::Filter::Linear, GL::Filter::Linear );
+		}
 		glFramebufferTexture2D( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColor, 0 );
-		
 		// Create renderbuffer to hold depth buffer
 		if ( depth > 0 ) {
-			glBindTexture( GL_TEXTURE_2D, texDepth );
-			glTexImage2D( GL_TEXTURE_2D, 0, depthFormat, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0 );
-			texDepth.SetWrapping( GL::Wrapping::ClampEdge, GL::Wrapping::ClampEdge );
-			texDepth.SetFilters( GL::Filter::Nearest, GL::Filter::Nearest );
+			if(depth_buff){
+				texDepth = Texture(*depth_buff);
+			} else {
+				glBindTexture( GL_TEXTURE_2D, texDepth );
+				glTexImage2D( GL_TEXTURE_2D, 0, depthFormat, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0 );
+				texDepth.SetWrapping( GL::Wrapping::ClampEdge, GL::Wrapping::ClampEdge );
+				texDepth.SetFilters( GL::Filter::Nearest, GL::Filter::Nearest );
+			}
 			glFramebufferTexture2D( GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texDepth, 0 );
 		}
 

@@ -55,6 +55,14 @@ namespace GL
 		POPSTATE()
 	}
 
+	Texture::Texture(const GLuint& texId){
+		PUSHSTATE()
+
+		gc.Create( obj, glDeleteTextures );
+		
+		POPSTATE()
+	}
+
 	Texture::~Texture()
 	{
 		gc.Destroy( obj );

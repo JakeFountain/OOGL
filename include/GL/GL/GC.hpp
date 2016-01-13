@@ -56,6 +56,14 @@ namespace GL
 			this->d = d;
 			this->d2 = 0;
 		}
+		
+		void Create(GLuint& obj, deleteFunc d)
+		{
+			refs.insert(std::pair<GLuint, uint>(obj, 1));
+
+			this->d = d;
+			this->d2 = 0;
+		}
 
 		int Create( const GLuint& obj, deleteFunc2 d2 )
 		{

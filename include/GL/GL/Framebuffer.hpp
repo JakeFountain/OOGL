@@ -47,7 +47,7 @@ namespace GL
 	{
 	public:
 		Framebuffer( const Framebuffer& other );
-		Framebuffer( uint width, uint height, uchar color = 32, uchar depth = 24 );
+		Framebuffer(uint width, uint height, GLuint * colour_buff = nullptr, GLuint * depth_buff = nullptr, uchar color = 32, uchar depth = 24);
 		~Framebuffer();
 
 		operator GLuint() const;
