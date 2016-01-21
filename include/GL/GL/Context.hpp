@@ -181,6 +181,8 @@ namespace GL
 
 		~Context();
 
+		Context(uchar color, uchar depth, uchar stencil, uint antialias, HDC dc);
+
 	private:
 		friend class Window;
 		
@@ -190,7 +192,6 @@ namespace GL
 		GLint defaultViewport[4];
 
 #if defined( OOGL_PLATFORM_WINDOWS )
-		Context( uchar color, uchar depth, uchar stencil, uint antialias, HDC dc );
 
 		HDC dc;
 		HGLRC context;

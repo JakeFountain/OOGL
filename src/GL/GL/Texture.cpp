@@ -57,7 +57,8 @@ namespace GL
 
 	Texture::Texture(const GLuint& texId){
 		PUSHSTATE()
-
+		
+		obj = texId;
 		gc.Create( obj, glDeleteTextures );
 		
 		POPSTATE()
